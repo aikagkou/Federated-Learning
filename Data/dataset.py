@@ -22,6 +22,9 @@ df_reduced = df_reduced.rename(columns={"Date": "ds", "Energy_Median": "y"})
 clients = df_reduced["ID Client"].unique()
 print(clients)
 
+scaler = MinMaxScaler(feature_range=(0, 1))
+df_reduced['y'] = scaler.fit_transform(df_reduced[['y']])
+
 # Split the data for each client
 train_data_list = []
 test_data_list = []
@@ -51,6 +54,3 @@ print(train_data_combined.head())
 
 print("\nTest Data:")
 print(test_data_combined.head())
-
-scaler = MinMaxScaler(feature_range=(0, 1))
-df_reduced['y'] = scaler.fit_transform(df_reduced[['y']])
