@@ -6,8 +6,7 @@ from sklearn.model_selection import train_test_split
 
 
 # Load the dataset and filter data for each client
-df = pd.read_csv('/content/daily_dataset.csv')
-df = df[['LCLid', 'day', 'energy_median']]
+df = pd.read_csv('Data/filtered_dataset.csv')
 df.columns = ['ID Client', 'Date', 'Energy_Median']
 df['Date'] = pd.to_datetime(df['Date'])
 
