@@ -48,7 +48,25 @@ client_list = create_fed_clients(trainset, args.clients)
 
 # Initialize model, optimizer, criterion
 # Get Model
-from ml.models.cnn import CNN
-model = CNN()
+from ml.models.cnn import LSTMModel
+model = LSTMModel()
 model.to(device)
+
+# Initialize Fed Clients
+from ml.utils.fed_utils import initialize_fed_clients
+client_list = initialize_fed_clients(client_list, args, copy.deepcopy(model))
+
+# Initiazlize Server with its own strategy, global test, global model, global optimizer, client selection 
+from ml.fl.server import Server
+Fl_Server = Server(args, testset, copy.deepcopy(model))
+
+# Initiazlize Server with its own strategy, global test, global model, global optimizer, client selection 
+from ml.fl.server import Server
+Fl_Server = Server(args, testset, copy.deepcopy(model))
+
+for round in range(args.fl_rounds+1):
+    print(f"FL Round: {round}")
+    client_list = Fl_Server.update(client_list)
+    acc, f1 = Fl_Server.evaluate()
+    print(f'Round {round} - Server Accuracy: {acc}, Server F1: {f1}.')
 
