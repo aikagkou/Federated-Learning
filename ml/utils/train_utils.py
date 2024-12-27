@@ -42,8 +42,8 @@ def train(
     train_history = {'acc':train_acc, 'loss':train_loss, 'f1':train_f1}
     for i in range(epochs + 1):
         
-        for images, labels in trainloader:
-            images, labels = images.to(device), labels.to(device)
+        for data, labels in trainloader:
+            data, labels = data.to(device), labels.to(device)
             optimizer.zero_grad()
             loss = criterion(model(images), labels)
             loss.backward()
@@ -90,8 +90,8 @@ def test(
         raise ValueError("Testloader can't be 0, exiting...")
     
     with torch.no_grad():
-        for images, labels in testloader:
-            images, labels = images.to(device), labels.to(device)
+        for data, labels in testloader:
+            data, labels = data.to(device), labels.to(device)
             outputs = model(images)
             loss += criterion(outputs, labels).item()
             _, predicted = torch.max(outputs.data, 1)
