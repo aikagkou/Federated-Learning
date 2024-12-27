@@ -26,7 +26,7 @@ torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
 # Load dataset
-from dataset.load_dataset import load_dataset()
+from dataset.load_dataset import load_dataset
 trainset, testset = load_dataset()
 
 # Print Dataset Details
