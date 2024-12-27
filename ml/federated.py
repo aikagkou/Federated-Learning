@@ -27,5 +27,18 @@ torch.backends.cudnn.benchmark = False
 
 # Load dataset
 from dataset.load_dataset import load_dataset()
-trainset, testset = load_dataset()
+train_data_combined, test_data_combined = load_dataset()
+
+# Print Dataset Details
+print("== Predict Energy ==")
+in_dim = 1
+num_classes = len(torch.unique(torch.as_tensor(trainset.targets)))
+print(f'Input Dimensions: {in_dim}')
+print(f'Num of Classes: {num_classes}')
+print(f'Train Samples: {len(trainset)}')
+print(f'Test Samples: {len(testset)}')
+print(f'Num of Clients: {args.clients}')
+print(f'Train samples per client: {int((len(trainset)/args.clients)*(1-args.test_size))}')
+print(f'Test samples per client: {int((len(trainset)/args.clients)*(args.test_size))}')
+print("===============")
 
