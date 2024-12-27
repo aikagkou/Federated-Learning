@@ -27,7 +27,7 @@ torch.backends.cudnn.benchmark = False
 
 # Load dataset
 from dataset.load_dataset import load_dataset()
-train_data_combined, test_data_combined = load_dataset()
+trainset, testset = load_dataset()
 
 # Print Dataset Details
 print("== Predict Energy ==")
@@ -41,4 +41,14 @@ print(f'Num of Clients: {args.clients}')
 print(f'Train samples per client: {int((len(trainset)/args.clients)*(1-args.test_size))}')
 print(f'Test samples per client: {int((len(trainset)/args.clients)*(args.test_size))}')
 print("===============")
+
+# Create Clients - each client has its own id, trainloader, testloader, model, optimizer
+from ml.utils.fed_utils import create_fed_clients
+client_list = create_fed_clients(trainset, args.clients)
+
+# Initialize model, optimizer, criterion
+# Get Model
+from ml.models.cnn import CNN
+model = CNN()
+model.to(device)
 
