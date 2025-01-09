@@ -10,7 +10,7 @@ from typing import Tuple, List
 
 import numpy as np
 
-from ml.fl.aggregation.aggregate import fedavg_aggregate, median_aggregate, fednova_aggregate, \
+from aggregate import fedavg_aggregate, median_aggregate, fednova_aggregate, \
     fedadagrad_aggregate, simple_aggregate, fedyogi_aggregate, fedadam_aggregate, fedavgm_aggregate
 
 
