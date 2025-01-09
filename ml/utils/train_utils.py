@@ -45,7 +45,7 @@ def train(
         for data, labels in trainloader:
             data, labels = data.to(device), labels.to(device)
             optimizer.zero_grad()
-            loss = criterion(model(images), labels)
+            loss = criterion(model(data), labels)
             loss.backward()
             optimizer.step()
         
