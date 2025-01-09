@@ -92,7 +92,7 @@ def test(
     with torch.no_grad():
         for data, labels in testloader:
             data, labels = data.to(device), labels.to(device)
-            outputs = model(images)
+            outputs = model(data)
             loss += criterion(outputs, labels).item()
             _, predicted = torch.max(outputs.data, 1)
             accs.append(accuracy_score(labels.cpu(), predicted.cpu()))
