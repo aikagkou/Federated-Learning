@@ -3,6 +3,8 @@ import numpy as np
 import torch
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+import math
+import random
 
 
 def load_dataset():
@@ -25,35 +27,17 @@ def load_dataset():
     
     scaler = MinMaxScaler(feature_range=(0, 1))
     df_reduced['y'] = scaler.fit_transform(df_reduced[['y']])
-    
-    # Split the data for each client
-    train_data_list = []
-    test_data_list = []
-    
-    for client in clients:
-        client_data = df_reduced[df_reduced["ID Client"] == client]
-        
-        # Sort by date to maintain time order
-        client_data = client_data.sort_values(by="ds")
-        
-        # Perform the train-test split
-        train_data, test_data = train_test_split(
-            client_data,
-            test_size=0.2,
-            shuffle=False  # Important for time series data
-        )
-        
-        train_data_list.append(train_data)
-        test_data_list.append(test_data)
-    
-    # Combine all clients' data back together if needed
-    train_data_combined = pd.concat(train_data_list)
-    test_data_combined = pd.concat(test_data_list)
-    
-    print("Train Data:")
-    print(train_data_combined.head())
-    
-    print("\nTest Data:")
-    print(test_data_combined.head())
 
-    return train_data_combined, test_data_combined
+    n_clients = len(clients)
+
+    # Randomly select 80% of the clients for training
+    train_clients = random.sample(list(clients), math.ceil(0.8*n_clients))
+
+    # Split the data
+    train_data = df_reduced[df_reduced['ID Client'].isin(train_clients)]
+    test_data = df_reduced[df_reduced['ID Client'].isin(train_clients)]
+
+    print(train_data)
+    print(test_data)
+    print(train_data.shape, test_data.shape)
+    return train_data, test_data
