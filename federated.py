@@ -32,7 +32,7 @@ trainset, testset = load_dataset()
 # Print Dataset Details
 print("== Predict Energy ==")
 in_dim = 1
-num_classes = len(torch.unique(torch.as_tensor(trainset.targets)))
+num_classes = len(torch.unique(trainset.y_data))
 print(f'Input Dimensions: {in_dim}')
 print(f'Num of Classes: {num_classes}')
 print(f'Train Samples: {len(trainset)}')
