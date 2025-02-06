@@ -29,10 +29,16 @@ torch.backends.cudnn.benchmark = False
 from dataset.load_dataset import load_dataset
 trainset, testset = load_dataset()
 
+# Ensure proper split for PyTorch compatibility
+train_size = int(len(trainset) * (1 - args.test_size))
+test_size = len(trainset) - train_size
+
+trainset, testset = torch.utils.data.random_split(trainset, [train_size, test_size])
+
 # Print Dataset Details
 print("== Predict Energy ==")
 in_dim = 1
-num_classes = len(torch.unique(trainset.y_data))
+num_classes = len(torch.unique(torch.as_tensor(trainset.targets)))
 print(f'Input Dimensions: {in_dim}')
 print(f'Num of Classes: {num_classes}')
 print(f'Train Samples: {len(trainset)}')
