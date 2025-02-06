@@ -5,6 +5,24 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 import math
 import random
+from torch.utils.data import Dataset
+
+
+# Define custom dataset for PyTorch
+class EnergyDataset(Dataset):
+    def __init__(self, df):
+        self.df = df
+        # Convert columns to tensors
+        self.x_data = torch.tensor(df.index.values, dtype=torch.float32).unsqueeze(1)  # Dummy feature
+        self.y_data = torch.tensor(df['y'].values, dtype=torch.float32).unsqueeze(1)
+
+    def __len__(self):
+        return len(self.df)
+
+    def __getitem__(self, index):
+        x = self.x_data[index]
+        y = self.y_data[index]
+        return x, y
 
 
 def load_dataset():
@@ -40,4 +58,4 @@ def load_dataset():
     print(train_data)
     print(test_data)
     print(train_data.shape, test_data.shape)
-    return train_data, test_data
+    return EnergyDataset(train_data), EnergyDataset(test_data)
