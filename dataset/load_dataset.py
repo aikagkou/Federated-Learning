@@ -11,17 +11,18 @@ from torch.utils.data import Dataset
 # Define custom dataset for PyTorch
 class EnergyDataset(Dataset):
     def __init__(self, df):
-        # Reset DataFrame index and store it
-        self.data = df.reset_index(drop=True)
+        self.df = df
+        # Convert columns to tensors
+        self.x_data = torch.tensor(df.index.values, dtype=torch.float32).unsqueeze(1)  # Dummy feature
+        self.y_data = torch.tensor(df['y'].values, dtype=torch.float32).unsqueeze(1)
 
     def __len__(self):
-        return len(self.data)
+        return len(self.df)
 
-    def __getitem__(self, idx):
-        x = torch.tensor(self.data.loc[idx, "ds"].timestamp(), dtype=torch.float32)  # Convert datetime to timestamp
-        y = torch.tensor(self.data.loc[idx, "y"], dtype=torch.float32)
+    def __getitem__(self, index):
+        x = self.x_data[index]
+        y = self.y_data[index]
         return x, y
-
 
 def load_dataset():
     # Load the dataset and filter data for each client
@@ -57,8 +58,5 @@ def load_dataset():
     print(test_data)
     print(train_data.shape, test_data.shape)
 
-    # Convert DataFrames to PyTorch Datasets
-    trainset = EnergyDataset(train_data)
-    testset = EnergyDataset(test_data)
-
-    return trainset, testset
+    # Return PyTorch datasets
+    return EnergyDataset(train_data), EnergyDataset(test_data)
