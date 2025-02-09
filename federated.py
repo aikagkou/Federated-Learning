@@ -25,30 +25,9 @@ torch.cuda.manual_seed_all(args.seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
-# Create DataLoaders for training and testing
-train_loader = DataLoader(trainset, batch_size=args.batch_size, shuffle=True)
-test_loader = DataLoader(testset, batch_size=args.batch_size, shuffle=False)
-
-# Print dataset details to verify correct loading
-print(f"Train samples: {len(trainset)}")
-print(f"Test samples: {len(testset)}")
-
 # Load dataset
 from dataset.load_dataset import load_dataset
 trainset, testset = load_dataset()
-
-# Ensure proper split for PyTorch compatibility
-train_size = int(len(trainset) * (1 - args.test_size))
-test_size = len(trainset) - train_size
-
-trainset, testset = torch.utils.data.random_split(trainset, [train_size, test_size])
-
-# Optionally split further using random_split if needed
-from torch.utils.data import random_split
-
-train_size = int(len(trainset) * (1 - args.test_size))
-test_size = len(trainset) - train_size
-trainset, testset = random_split(trainset, [train_size, test_size])
 
 # Print Dataset Details
 print("== Predict Energy ==")
